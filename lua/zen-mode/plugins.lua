@@ -3,26 +3,22 @@ local M = {}
 function M.gitsigns(state, disable)
   local gs = require("gitsigns")
   local config = require("gitsigns.config").config
-  if disable then
-    state.signcolumn = config.signcolumn
-    state.numhl = config.numhl
-    state.linehl = config.linehl
-    state.word_diff = config.word_diff
-    state.current_line_blame = config.current_line_blame
-    state.show_deleted = config.show_deleted
-    config.signcolumn = false
-    config.numhl = false
-    config.linehl = false
-    config.word_diff = false
-    config.current_line_blame = false
-    config.show_deleted = false
-  else
-    config.signcolumn = state.signcolumn
-    config.numhl = state.numhl
-    config.linehl = state.linehl
-    config.word_diff = state.word_diff
-    config.current_line_blame = state.current_line_blame
-    config.show_deleted = state.show_deleted
+  -- https://github.com/lewis6991/gitsigns.nvim/blob/f4648dcc055a10573f36e83343592824155ab466/teal/gitsigns/actions.tl#L74-L108
+  local configs = {
+    "signcolumn",
+    "numhl",
+    "linehl",
+    "word_diff",
+    "current_line_blame",
+    "show_deleted",
+  }
+  for _, name in ipairs(configs) do
+    if disable then
+      state[name] = config[name]
+      config[name] = false
+    else
+      config[name] = state[name]
+    end
   end
   gs.refresh()
 end
