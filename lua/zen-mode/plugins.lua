@@ -7,13 +7,22 @@ function M.gitsigns(state, disable)
     state.signcolumn = config.signcolumn
     state.numhl = config.numhl
     state.linehl = config.linehl
+    state.word_diff = config.word_diff
+    state.current_line_blame = config.current_line_blame
+    state.show_deleted = config.show_deleted
     config.signcolumn = false
     config.numhl = false
     config.linehl = false
+    config.word_diff = false
+    config.current_line_blame = false
+    config.show_deleted = false
   else
     config.signcolumn = state.signcolumn
     config.numhl = state.numhl
     config.linehl = state.linehl
+    config.word_diff = state.word_diff
+    config.current_line_blame = state.current_line_blame
+    config.show_deleted = state.show_deleted
   end
   gs.refresh()
 end
