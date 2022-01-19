@@ -1,5 +1,9 @@
 local M = {}
 
+-- we need to disable gitsigns.nvim before creating a new window
+-- otherwise it will leave weird virtual text
+M.run_before_win = { "gitsigns" }
+
 function M.gitsigns(state, disable)
   local gs = require("gitsigns")
   local config = require("gitsigns.config").config

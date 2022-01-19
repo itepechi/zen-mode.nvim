@@ -16,9 +16,10 @@ function M.is_open()
   return M.win and vim.api.nvim_win_is_valid(M.win)
 end
 
-function M.plugins_on_open()
+function M.plugins_on_open(before_win)
   for name, opts in pairs(M.opts.plugins) do
-    if opts and opts.enabled then
+    local should_run = before_win == vim.tbl_contains(plugins.run_before_win, name)
+    if opts and opts.enabled and should_run then
       local plugin = plugins[name]
       M.state[name] = {}
       pcall(plugin, M.state[name], true, opts)
@@ -137,6 +138,8 @@ function M.create(opts)
   M.state = {}
   M.parent = vim.api.nvim_get_current_win()
 
+  M.plugins_on_open(true)
+
   M.bg_buf = vim.api.nvim_create_buf(false, true)
   local ok
   ok, M.bg_win = pcall(vim.api.nvim_open_win, M.bg_buf, false, {
@@ -170,7 +173,7 @@ function M.create(opts)
     vim.api.nvim_win_set_option(M.win, k, v)
   end
 
-  M.plugins_on_open()
+  M.plugins_on_open(false)
   if type(opts.on_open) == "function" then
     opts.on_open(M.win)
   end
